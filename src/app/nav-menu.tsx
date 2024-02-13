@@ -9,14 +9,24 @@ import {
   NavbarMenuToggle,
   Link,
   Button,
+  NavbarMenuItem,
 } from "@nextui-org/react";
 import React from "react";
 
 export function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
+  const menuItems = [
+    { name: "Artists", link: "/artists" },
+    { name: "Albums", link: "/albums" },
+    { name: "EPs", link: "/eps" },
+    { name: "Singles", link: "/singles" },
+    { name: "Sign Up", link: "/sign-up" },
+    { name: "Sign In", link: "/sign-in" },
+  ];
+
   return (
-    <Navbar>
+    <Navbar onMenuOpenChange={setIsMenuOpen}>
       <NavbarContent>
         <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
@@ -35,10 +45,19 @@ export function NavMenu() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground">Albums</Link>
+          <Link color="foreground" href="/albums" className="cursor-pointer">
+            Albums
+          </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground">Songs</Link>
+          <Link color="foreground" href="/eps" className="cursor-pointer">
+            EPs
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
+          <Link color="foreground" href="/singles" className="cursor-pointer">
+            Singles
+          </Link>
         </NavbarItem>
       </NavbarContent>
       <NavbarContent justify="end">
@@ -47,7 +66,26 @@ export function NavMenu() {
             Sign Up
           </Button>
         </NavbarItem>
+        <NavbarItem>
+          <Button as={Link} href="/sign-in" color="primary">
+            Sign in
+          </Button>
+        </NavbarItem>
       </NavbarContent>
+      <NavbarMenu>
+        {menuItems.map((menuItem, i) => (
+          <NavbarMenuItem key={`${menuItem}-${i}`}>
+            <Link
+              color="foreground"
+              className="w-full"
+              href={menuItem.link}
+              size="lg"
+            >
+              {menuItem.name}
+            </Link>
+          </NavbarMenuItem>
+        ))}
+      </NavbarMenu>
     </Navbar>
   );
 }
