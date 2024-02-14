@@ -21,8 +21,9 @@ export function SpotifyAuthButton() {
       href={`https://accounts.spotify.com/authorize?${form}`}
       size="lg"
       variant="ghost"
+      className="flex"
     >
-      <FontAwesomeIcon icon={faSpotify} size="2xl" color="#1DB954" />
+      <FontAwesomeIcon icon={faSpotify} size="xs" />
       <p className="text-[#1DB954]">Login with Spotify</p>
     </Button>
   );
