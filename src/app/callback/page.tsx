@@ -1,11 +1,11 @@
 "use client";
 
 import { Spinner } from "@nextui-org/react";
-import React from "react";
+import React, { Suspense } from "react";
 import axios from "axios";
 import { useSearchParams, redirect } from "next/navigation";
 
-export default function Callback() {
+function GetAndSetAccessToken() {
   const searchParams = useSearchParams();
 
   const authCode = searchParams.get("code");
@@ -35,4 +35,12 @@ export default function Callback() {
   }, []);
 
   return <Spinner />;
+}
+
+export default function Callback() {
+  return (
+    <Suspense>
+      <GetAndSetAccessToken />
+    </Suspense>
+  );
 }
