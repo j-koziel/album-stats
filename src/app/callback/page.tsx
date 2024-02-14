@@ -17,7 +17,10 @@ function GetAndSetAccessToken() {
         {
           grant_type: "authorization_code",
           code: authCode,
-          redirect_uri: "http://localhost:3000/callback",
+          redirect_uri:
+            process.env.NODE_ENV === "production"
+              ? "https://album-stats.vercel.app/callback"
+              : "http://localhost:3000/callback",
           client_id: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,
           client_secret: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_SECRET,
         },

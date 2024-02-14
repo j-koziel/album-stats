@@ -8,7 +8,10 @@ export function SpotifyAuthButton() {
     response_type: "code",
     client_id: process.env.NEXT_PUBLIC_SPOTIFY_CLIENT_ID,
     scope: "user-read-private user-read-email",
-    redirect_uri: "http://localhost:3000/callback",
+    redirect_uri:
+      process.env.NODE_ENV === "production"
+        ? "https://album-stats.vercel.app/callback"
+        : "http://localhost:3000/callback",
   });
 
   return (
