@@ -2,27 +2,24 @@
 
 import {
   Button,
-  Card,
-  CardBody,
   Image,
   Input,
+  Link,
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   useDisclosure,
 } from "@nextui-org/react";
-import {
-  HeartFilledIcon,
-  HeartIcon,
-  MagnifyingGlassIcon,
-  StarIcon,
-} from "@radix-ui/react-icons";
+import { MagnifyingGlassIcon, StarIcon } from "@radix-ui/react-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSpotify } from "@fortawesome/free-brands-svg-icons";
 import axios from "axios";
 import React from "react";
+import { encode } from "urlencode";
 
 import { AlbumCard } from "./components/album-card";
+import { SpotifyAuthButton } from "@/components/spotify-auth-button";
 
 export default function Albums() {
   const [albumSearchQuery, setAlbumSearchQuery] = React.useState<string>("");
@@ -35,29 +32,26 @@ export default function Albums() {
 
   const ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
+  // React.useEffect(() => {}, [])
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSearching(true);
     const res = await axios.get(
-      `https://api.discogs.com/database/search?release_title=${albumSearchQuery}&type=release&format=file`,
+      `
+https://api.spotify.com/v1/search?q=${encode(
+        albumSearchQuery,
+        "gbk"
+      )}&type=album`,
       {
         headers: {
-          Authorization: `Discogs token=${process.env.NEXT_PUBLIC_DISCOGS_API_KEY}`,
-          "User-Agent": "AlbumStats/0.1",
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
         },
       }
     );
 
-    const cleanedData = res.data.results.filter((album: any) => {
-      if (album.format.includes("Vinyl") || album.format.includes("CD")) {
-        return false;
-      } else {
-        return true;
-      }
-    });
-
     console.log(res.data);
-    setAlbumSearchResultsData(cleanedData);
+    setAlbumSearchResultsData(res.data);
     setIsSearching(false);
   };
 
@@ -88,13 +82,13 @@ export default function Albums() {
       </form>
       {albumSearchResultsData && (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {albumSearchResultsData.map((album: any, i: number) => (
+          {albumSearchResultsData.albums.items.map((album: any, i: number) => (
             <AlbumCard
               key={i}
               album={album}
               setAlbumInfo={setAlbumInfo}
               openModal={onOpen}
-              className="flex flex-col cursor-pointer w-[300px] transition-all hover:scale-105"
+              className="flex flex-col w-[300px]"
             />
           ))}
         </div>
@@ -107,9 +101,9 @@ export default function Albums() {
       )}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="h-[500px]">
         {albumInfo && (
-          <ModalContent className="overflow-y-scroll">
+          <ModalContent className="overflow-y-scroll scrollbar-thin scrollbar-track-background scrollbar-thumb-default">
             <ModalHeader className="flex flex-col">
-              {albumInfo.title}
+              {albumInfo.name}
               <div className="flex gap-x-2">
                 {albumInfo.artists.map((artist: any, i: number) => (
                   <p key={i}>{artist.name}</p>
@@ -117,10 +111,7 @@ export default function Albums() {
               </div>
             </ModalHeader>
             <ModalBody>
-              <Image
-                src={albumInfo.images[0].resource_url}
-                alt={albumInfo.title}
-              />
+              <Image src={albumInfo.images[0].url} alt={albumInfo.name} />
               <h3 className="font-bold">Rate:</h3>
               <div className="flex mb-2">
                 {ratings.map((rating, i) => (
@@ -139,13 +130,44 @@ export default function Albums() {
                 </p>
                 <h2 className="font-bold mb-1">Tracks:</h2>
                 <div className="h-[200px] overflow-y-scroll scrollbar-hide flex flex-col gap-y-2">
-                  {albumInfo.tracklist.map((track: any, i: number) => (
+                  {albumInfo.tracks.items.map((track: any, i: number) => (
                     <div
                       key={i}
-                      className="flex gap-x-2 border-2 border-foreground-200 rounded-md p-4"
+                      className="flex items-center justify-between border-2 border-foreground-200 rounded-md p-4"
                     >
-                      <p>{track.position}.</p>
-                      <p>{track.title}</p>
+                      <div className="flex gap-x-2">
+                        <p>{track.track_number}.</p>
+                        <p>{track.name}</p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          as={Link}
+                          size="sm"
+                          variant="bordered"
+                          href={`${track.external_urls.spotify}`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          <FontAwesomeIcon
+                            icon={faSpotify}
+                            size="2xl"
+                            color="#1DB954"
+                          />
+                        </Button>
+                        <Button
+                          as={Link}
+                          size="sm"
+                          variant="bordered"
+                          href={`https://music.apple.com/us/search?term=${encode(
+                            track.name + " " + albumInfo.artists[0].name,
+                            "gbk"
+                          )}`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          Apple
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>

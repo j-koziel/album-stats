@@ -24,29 +24,26 @@ export function AlbumCard({
 }) {
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
 
+  const renderPopularityChip = (popularity: number) => {
+    if (popularity >= 80) {
+      return <Chip color="primary">Popular</Chip>;
+    }
+
+    return null;
+  };
+
   return (
     <Card className={className}>
       <CardHeader className="flex flex-col">
-        <p>{album.title}</p>
+        <p>{album.name}</p>
         <Image
-          src={album.cover_image}
-          alt={album.title}
+          src={album.images[1].url}
+          alt={album.name}
           height={200}
           width={200}
         />
       </CardHeader>
-      <CardBody>
-        <div className="flex gap-x-2 gap-y-2 flex-wrap">
-          {album.genre.map((genre: string, i: number) => (
-            <Chip key={i} color="primary">
-              {genre}
-            </Chip>
-          ))}
-          {album.style.map((genre: string, i: number) => (
-            <Chip key={i}>{genre}</Chip>
-          ))}
-        </div>
-      </CardBody>
+      <CardBody>{renderPopularityChip(album.popularity)}</CardBody>
       <CardFooter className="flex gap-x-2">
         {isLiked && <HeartFilledIcon onClick={() => setIsLiked(false)} />}
         {!isLiked && (
@@ -58,10 +55,9 @@ export function AlbumCard({
         {Math.floor(Math.random() * 100)}k
         <Button
           onPress={async () => {
-            const res = await axios.get(album.master_url, {
+            const res = await axios.get(album.href, {
               headers: {
-                Authorization: `Discogs token=${process.env.NEXT_PUBLIC_DISCOGS_API_KEY}`,
-                "User-Agent": "AlbumStats/0.1",
+                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
               },
             });
 
