@@ -1,3 +1,8 @@
+import {
+  Album,
+  SimplifiedArtist,
+  SimplifiedTrack,
+} from "@/types/spotify-responses";
 import { faSpotify } from "@fortawesome/free-brands-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -21,7 +26,7 @@ export function AlbumModal({
   isOpen,
   onOpenChange,
 }: {
-  albumInfo: any;
+  albumInfo: Album;
   isOpen: boolean;
   onOpenChange: ((isOpen: boolean) => void) | undefined;
 }) {
@@ -60,10 +65,10 @@ export function AlbumModal({
                 <div>
                   <h3>Featured Artists:</h3>
                   <div className="flex gap-2 flex-wrap">
-                    {albumInfo.tracks.items.map((track: any) => {
-                      const featuredArtists: any[] = [];
+                    {albumInfo.tracks.items.map((track: SimplifiedTrack) => {
+                      const featuredArtists: SimplifiedArtist[] = [];
 
-                      track.artists.forEach((artist: any) => {
+                      track.artists.forEach((artist: SimplifiedArtist) => {
                         if (artist.name != albumInfo.artists[0].name) {
                           featuredArtists.push(artist);
                         }
@@ -87,49 +92,51 @@ export function AlbumModal({
                 className="h-[250px] flex flex-col gap-y-1"
                 hideScrollBar
               >
-                {albumInfo.tracks.items.map((track: any, i: number) => (
-                  <div
-                    key={i}
-                    className="flex items-center justify-between border-2 border-foreground-200 rounded-md p-4"
-                  >
-                    <div className="flex gap-x-2">
-                      <p>{track.track_number}.</p>
+                {albumInfo.tracks.items.map(
+                  (track: SimplifiedTrack, i: number) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between border-2 border-foreground-200 rounded-md p-4"
+                    >
                       <div className="flex gap-x-2">
-                        <p>{track.name}</p>
-                        {track.explicit && <Chip color="default">E</Chip>}
+                        <p>{track.track_number}.</p>
+                        <div className="flex gap-x-2">
+                          <p>{track.name}</p>
+                          {track.explicit && <Chip color="default">E</Chip>}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          as={Link}
+                          size="sm"
+                          variant="bordered"
+                          href={`${track.external_urls.spotify}`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          <FontAwesomeIcon
+                            icon={faSpotify}
+                            size="2xl"
+                            color="#1DB954"
+                          />
+                        </Button>
+                        <Button
+                          as={Link}
+                          size="sm"
+                          variant="bordered"
+                          href={`https://music.apple.com/us/search?term=${encode(
+                            track.name + " " + albumInfo.artists[0].name,
+                            "gbk"
+                          )}`}
+                          rel="noreferrer"
+                          target="_blank"
+                        >
+                          Apple
+                        </Button>
                       </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        as={Link}
-                        size="sm"
-                        variant="bordered"
-                        href={`${track.external_urls.spotify}`}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        <FontAwesomeIcon
-                          icon={faSpotify}
-                          size="2xl"
-                          color="#1DB954"
-                        />
-                      </Button>
-                      <Button
-                        as={Link}
-                        size="sm"
-                        variant="bordered"
-                        href={`https://music.apple.com/us/search?term=${encode(
-                          track.name + " " + albumInfo.artists[0].name,
-                          "gbk"
-                        )}`}
-                        rel="noreferrer"
-                        target="_blank"
-                      >
-                        Apple
-                      </Button>
-                    </div>
-                  </div>
-                ))}
+                  )
+                )}
               </ScrollShadow>
             </div>
           </div>

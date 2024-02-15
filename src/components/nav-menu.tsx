@@ -18,9 +18,7 @@ export function NavMenu() {
 
   const menuItems = [
     { name: "Artists", link: "/artists" },
-    { name: "Albums", link: "/albums" },
-    { name: "EPs", link: "/eps" },
-    { name: "Singles", link: "/singles" },
+    { name: "Releases", link: "/releases" },
     { name: "Sign Up", link: "/sign-up" },
     { name: "Sign In", link: "/sign-in" },
   ];
@@ -46,17 +44,7 @@ export function NavMenu() {
         </NavbarItem>
         <NavbarItem>
           <Link color="foreground" href="/albums" className="cursor-pointer">
-            Albums
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="/eps" className="cursor-pointer">
-            EPs
-          </Link>
-        </NavbarItem>
-        <NavbarItem>
-          <Link color="foreground" href="/singles" className="cursor-pointer">
-            Singles
+            Releases
           </Link>
         </NavbarItem>
       </NavbarContent>
