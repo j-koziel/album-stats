@@ -33,7 +33,7 @@ export function NavMenu() {
           className="sm:hidden"
         />
         <NavbarBrand>
-          <Link href="/" className="text-foreground">
+          <Link href="/" className="text-foreground font-bold">
             Album Stats
           </Link>
         </NavbarBrand>

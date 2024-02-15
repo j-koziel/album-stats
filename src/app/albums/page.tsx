@@ -18,8 +18,9 @@ import axios from "axios";
 import React from "react";
 import { encode } from "urlencode";
 
-import { AlbumCard } from "./components/album-card";
-import { SpotifyAuthButton } from "@/components/spotify-auth-button";
+import { AlbumCard } from "@/components/album-card";
+import { spotifyApiEndpoints } from "@/lib/config";
+import { Carousel } from "@/components/carousel";
 
 export default function Albums() {
   const [albumSearchQuery, setAlbumSearchQuery] = React.useState<string>("");
@@ -27,16 +28,35 @@ export default function Albums() {
   const [albumSearchResultsData, setAlbumSearchResultsData] = React.useState<
     any | never
   >(null);
+  const [latestReleasesData, setLatestReleasesData] = React.useState<
+    any | never
+  >(null);
   const [albumInfo, setAlbumInfo] = React.useState<any | never>(null);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   const ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-  // React.useEffect(() => {}, [])
+  React.useEffect(() => {
+    const getLatestReleases = async () => {
+      const res = await axios.get(
+        `${spotifyApiEndpoints.albums.latestReleases}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          },
+        }
+      );
+
+      console.log(res.data);
+      setLatestReleasesData(res.data);
+    };
+    getLatestReleases();
+  }, []);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSearching(true);
+    setAlbumSearchResultsData(null);
     const res = await axios.get(
       `
 https://api.spotify.com/v1/search?q=${encode(
@@ -50,7 +70,6 @@ https://api.spotify.com/v1/search?q=${encode(
       }
     );
 
-    console.log(res.data);
     setAlbumSearchResultsData(res.data);
     setIsSearching(false);
   };
@@ -93,10 +112,23 @@ https://api.spotify.com/v1/search?q=${encode(
           ))}
         </div>
       )}
-      {!albumSearchResultsData && (
+      {latestReleasesData && (
         <section className="flex flex-col">
           <div>Latest Releases</div>
-          <div>...</div>
+          <Carousel
+            items={latestReleasesData.albums.items.map(
+              (album: any, i: number) => (
+                <AlbumCard
+                  key={i}
+                  album={album}
+                  setAlbumInfo={setAlbumInfo}
+                  className="flex flex-col"
+                  openModal={onOpen}
+                />
+              )
+            )}
+            width={1000}
+          />
         </section>
       )}
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} className="h-[500px]">
@@ -114,7 +146,7 @@ https://api.spotify.com/v1/search?q=${encode(
               <Image src={albumInfo.images[0].url} alt={albumInfo.name} />
               <h3 className="font-bold">Rate:</h3>
               <div className="flex mb-2">
-                {ratings.map((rating, i) => (
+                {ratings.map((_, i) => (
                   <StarIcon key={i} height={36} width={36} />
                 ))}
               </div>

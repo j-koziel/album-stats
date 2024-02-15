@@ -24,26 +24,22 @@ export function AlbumCard({
 }) {
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
 
-  const renderPopularityChip = (popularity: number) => {
-    if (popularity >= 80) {
-      return <Chip color="primary">Popular</Chip>;
-    }
-
-    return null;
-  };
-
   return (
     <Card className={className}>
       <CardHeader className="flex flex-col">
         <p>{album.name}</p>
         <Image
-          src={album.images[1].url}
+          src={
+            album.images.filter(
+              (image: any) => image.height === 300 && image.width === 300
+            )[0].url
+          }
           alt={album.name}
           height={200}
           width={200}
         />
       </CardHeader>
-      <CardBody>{renderPopularityChip(album.popularity)}</CardBody>
+      <CardBody></CardBody>
       <CardFooter className="flex gap-x-2">
         {isLiked && <HeartFilledIcon onClick={() => setIsLiked(false)} />}
         {!isLiked && (
