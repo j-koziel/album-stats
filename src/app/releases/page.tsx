@@ -25,6 +25,7 @@ export default function Albums() {
     any | never
   >(null);
   const [albumInfo, setAlbumInfo] = React.useState<Album | null>(null);
+  const [isInvalid, setIsInvalid] = React.useState<boolean>(false);
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
   React.useEffect(() => {
@@ -44,14 +45,19 @@ export default function Albums() {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (!albumSearchQuery) {
+      setIsInvalid(true);
+      setIsSearching(false);
+      return;
+    }
+
     setIsSearching(true);
     setAlbumSearchResultsData(null);
+    setIsInvalid(false);
+
     const res = await axios.get(
       `
-https://api.spotify.com/v1/search?q=${encode(
-        albumSearchQuery,
-        "gbk"
-      )}&type=album`,
+${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
@@ -78,6 +84,8 @@ https://api.spotify.com/v1/search?q=${encode(
           value={albumSearchQuery}
           onChange={(e) => setAlbumSearchQuery(e.target.value)}
           autoFocus
+          isInvalid={isInvalid}
+          // errorMessage="Please enter something into the search box"
         />
         <Button
           type="submit"

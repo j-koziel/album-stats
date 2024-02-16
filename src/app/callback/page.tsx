@@ -34,7 +34,7 @@ function GetAndSetAccessToken() {
 
     getAccessToken();
 
-    redirect("/albums");
+    redirect("/releases");
   }, []);
 
   return <Spinner />;
