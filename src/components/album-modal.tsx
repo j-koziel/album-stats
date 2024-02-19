@@ -46,7 +46,12 @@ export function AlbumModal({
         <ModalBody>
           <div className="flex gap-2">
             <div className="flex flex-col gap-y-2">
-              <Image src={albumInfo.images[0].url} alt={albumInfo.name} />
+              <Image
+                src={albumInfo.images[0].url}
+                alt={albumInfo.name}
+                height={400}
+                width={400}
+              />
               <h3 className="font-bold">Rate:</h3>
               <Tooltip content="Please sign in to rate this album">
                 <div className="flex mb-2">

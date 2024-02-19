@@ -3,6 +3,7 @@ export const spotifyApiEndpoints = {
     latestReleases: "https://api.spotify.com/v1/browse/new-releases"
   },
   search: {
-    album: "https://api.spotify.com/v1/search?type=album"
+    album: "https://api.spotify.com/v1/search?type=album",
+    artist: "https://api.spotify.com/v1/search?type=artist"
   }
 }

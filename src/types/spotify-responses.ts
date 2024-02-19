@@ -99,3 +99,45 @@ export interface Album {
   label: string;
   popularity: number;
 }
+
+export interface ArtistFollowersObject {
+  href: null | string
+  total: number
+}
+export interface ArtistSearchItem {
+  external_urls: ExternalUrlsObject
+  followers: ArtistFollowersObject
+  genres: string[]
+  href: string
+  id: string
+  images: ImageObject[]
+  name: string
+  popularity: number
+  type: string
+  uri: string
+}
+
+export interface ArtistSearchResponse {
+  artists: {
+    href: string
+    limit: number
+    next: null | string
+    offset: number
+    previous: null | string
+    total: number
+    items: ArtistSearchItem[]
+  }
+}
+
+export interface Artist {
+  exteneral_urls: ExternalUrlsObject
+  followers: ArtistFollowersObject
+  genres: string[]
+  href: string
+  id: string
+  images: ImageObject[]
+  name: string
+  popularity: number
+  type: string
+  uri: string
+}
