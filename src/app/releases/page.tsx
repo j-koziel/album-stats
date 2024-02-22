@@ -115,20 +115,22 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
       {latestReleasesData && (
         <section className="flex flex-col">
           <div>Latest Releases</div>
-          <Carousel
-            items={latestReleasesData.map(
-              (album: SimplifiedAlbum, i: number) => (
-                <AlbumCard
-                  key={i}
-                  album={album}
-                  setAlbumInfo={setAlbumInfo}
-                  className="flex flex-col"
-                  openModal={onOpen}
-                />
-              )
-            )}
-            width={1000}
-          />
+          <div>
+            <Carousel
+              items={latestReleasesData.map(
+                (album: SimplifiedAlbum, i: number) => (
+                  <AlbumCard
+                    key={i}
+                    album={album}
+                    setAlbumInfo={setAlbumInfo}
+                    className="flex flex-col w-64"
+                    openModal={onOpen}
+                  />
+                )
+              )}
+              width={1000}
+            />
+          </div>
         </section>
       )}
       {albumInfo && (

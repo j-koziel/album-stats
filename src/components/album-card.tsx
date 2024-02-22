@@ -26,8 +26,7 @@ export function AlbumCard({
 
   return (
     <Card className={className}>
-      <CardHeader className="flex flex-col">
-        <p>{album.name}</p>
+      <CardHeader className="flex flex-col gap-y-2">
         <Image
           src={
             album.images.filter(
@@ -35,20 +34,26 @@ export function AlbumCard({
             )[0].url
           }
           alt={album.name}
-          height={200}
-          width={200}
+          height={300}
+          width={300}
         />
       </CardHeader>
-      <CardBody></CardBody>
-      <CardFooter className="flex gap-x-2">
-        {isLiked && <HeartFilledIcon onClick={() => setIsLiked(false)} />}
-        {!isLiked && (
-          <HeartIcon
-            className="cursor-pointer transition-all hover:scale-105"
-            onClick={() => setIsLiked(true)}
-          />
-        )}
-        {Math.floor(Math.random() * 100)}k
+      <CardBody>
+        <p className="w-3/4 truncate font-bold">{album.name}</p>
+        Artist: {album.artists[0].name}
+      </CardBody>
+      <CardFooter className="flex justify-between">
+        <span className="flex items-center gap-x-1">
+          {isLiked && <HeartFilledIcon onClick={() => setIsLiked(false)} />}
+          {!isLiked && (
+            <HeartIcon
+              className="cursor-pointer transition-all hover:scale-105"
+              onClick={() => setIsLiked(true)}
+            />
+          )}
+          {Math.floor(Math.random() * 100)}k
+        </span>
+
         <Button
           onPress={async () => {
             const res = await axios.get(album.href, {
@@ -56,8 +61,6 @@ export function AlbumCard({
                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
               },
             });
-
-            console.log(res.data);
 
             setAlbumInfo(res.data);
             openModal();
