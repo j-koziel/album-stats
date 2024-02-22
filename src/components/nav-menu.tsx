@@ -43,7 +43,7 @@ export function NavMenu() {
           </Link>
         </NavbarItem>
         <NavbarItem>
-          <Link color="foreground" href="/albums" className="cursor-pointer">
+          <Link color="foreground" href="/releases" className="cursor-pointer">
             Releases
           </Link>
         </NavbarItem>

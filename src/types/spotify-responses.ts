@@ -48,9 +48,9 @@ export interface SimplifiedTrack {
 
 
 
-export interface AlbumSearchItem {
+export interface SimplifiedAlbum {
   album_type: "single" | "album" | "compilation";
-  artists: { external_urls: ExternalUrlsObject, href: string, id: string, name: string, type: string, uri: string }[];
+  artists: SimplifiedArtist[];
   available_markets: string[];
   external_urls: ExternalUrlsObject;
   href: string;
@@ -68,7 +68,7 @@ export interface AlbumSearchItem {
 export interface AlbumSearchResponse {
   albums: {
     href: string;
-    items: AlbumSearchItem[]
+    items: SimplifiedAlbum[]
     limit: number;
     next: null | string;
     offset: number;

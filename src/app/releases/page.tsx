@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, useDisclosure } from "@nextui-org/react";
+import { Button, Input, Spinner, useDisclosure } from "@nextui-org/react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import React from "react";
@@ -12,7 +12,7 @@ import { spotifyApiEndpoints } from "@/lib/config";
 import { Carousel } from "@/components/carousel";
 import {
   AlbumSearchResponse,
-  AlbumSearchItem,
+  SimplifiedAlbum,
   Album,
 } from "@/types/spotify-responses";
 
@@ -22,7 +22,7 @@ export default function Albums() {
   const [albumSearchResultsData, setAlbumSearchResultsData] =
     React.useState<AlbumSearchResponse | null>(null);
   const [latestReleasesData, setLatestReleasesData] = React.useState<
-    any | never
+    any | null
   >(null);
   const [albumInfo, setAlbumInfo] = React.useState<Album | null>(null);
   const [isInvalid, setIsInvalid] = React.useState<boolean>(false);
@@ -85,7 +85,7 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
           onChange={(e) => setAlbumSearchQuery(e.target.value)}
           autoFocus
           isInvalid={isInvalid}
-          // errorMessage="Please enter something into the search box"
+          errorMessage={isInvalid ? "Please type something into the box" : null}
         />
         <Button
           type="submit"
@@ -100,7 +100,7 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
       {albumSearchResultsData && (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {albumSearchResultsData.albums.items.map(
-            (album: AlbumSearchItem, i: number) => (
+            (album: SimplifiedAlbum, i: number) => (
               <AlbumCard
                 key={i}
                 album={album}
@@ -112,24 +112,28 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
           )}
         </div>
       )}
-      {latestReleasesData && (
+      {latestReleasesData ? (
         <section className="flex flex-col">
           <div>Latest Releases</div>
-          <Carousel
-            items={latestReleasesData.map(
-              (album: AlbumSearchItem, i: number) => (
-                <AlbumCard
-                  key={i}
-                  album={album}
-                  setAlbumInfo={setAlbumInfo}
-                  className="flex flex-col"
-                  openModal={onOpen}
-                />
-              )
-            )}
-            width={1000}
-          />
+          <div>
+            <Carousel
+              items={latestReleasesData.map(
+                (album: SimplifiedAlbum, i: number) => (
+                  <AlbumCard
+                    key={i}
+                    album={album}
+                    setAlbumInfo={setAlbumInfo}
+                    className="flex flex-col w-64"
+                    openModal={onOpen}
+                  />
+                )
+              )}
+              width={1000}
+            />
+          </div>
         </section>
+      ) : (
+        <Spinner label="Loading latest releases..." />
       )}
       {albumInfo && (
         <AlbumModal
