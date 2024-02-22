@@ -33,7 +33,12 @@ export function AlbumModal({
   const ratings = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
   return (
-    <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="4xl">
+    <Modal
+      isOpen={isOpen}
+      onOpenChange={onOpenChange}
+      size="4xl"
+      className="text-foreground"
+    >
       <ModalContent>
         <ModalHeader className="flex flex-col">
           {albumInfo.name}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Input, useDisclosure } from "@nextui-org/react";
+import { Button, Input, Spinner, useDisclosure } from "@nextui-org/react";
 import { MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import React from "react";
@@ -112,7 +112,7 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
           )}
         </div>
       )}
-      {latestReleasesData && (
+      {latestReleasesData ? (
         <section className="flex flex-col">
           <div>Latest Releases</div>
           <div>
@@ -132,6 +132,8 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
             />
           </div>
         </section>
+      ) : (
+        <Spinner label="Loading latest releases..." />
       )}
       {albumInfo && (
         <AlbumModal
