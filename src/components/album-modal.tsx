@@ -111,7 +111,7 @@ export function AlbumModal({
                       <div className="flex gap-x-2">
                         <p>{track.track_number}.</p>
                         <div className="flex gap-x-2">
-                          <p>{track.name}</p>
+                          <p className="truncate w-[90%]">{track.name}</p>
                           {track.explicit && <Chip color="default">E</Chip>}
                         </div>
                       </div>
