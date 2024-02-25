@@ -1,3 +1,4 @@
+import { SimplifiedAlbum } from "@/types/spotify-responses";
 import {
   Card,
   CardHeader,
@@ -9,6 +10,7 @@ import {
 } from "@nextui-org/react";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export function AlbumCard({
@@ -17,11 +19,12 @@ export function AlbumCard({
   setAlbumInfo,
   openModal,
 }: {
-  album: any;
+  album: SimplifiedAlbum;
   className?: string;
   setAlbumInfo: React.Dispatch<any>;
   openModal: () => void;
 }) {
+  const router = useRouter();
   const [isLiked, setIsLiked] = React.useState<boolean>(false);
 
   return (
@@ -55,15 +58,18 @@ export function AlbumCard({
         </span>
 
         <Button
-          onPress={async () => {
-            const res = await axios.get(album.href, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-              },
-            });
+          // onPress={async () => {
+          //   const res = await axios.get(album.href, {
+          //     headers: {
+          //       Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+          //     },
+          //   });
 
-            setAlbumInfo(res.data);
-            openModal();
+          //   setAlbumInfo(res.data);
+          //   openModal();
+          // }}
+          onPress={() => {
+            router.push(`/releases/${album.id}`);
           }}
         >
           More info
