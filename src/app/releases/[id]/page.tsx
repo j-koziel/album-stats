@@ -2,6 +2,7 @@
 
 import {
   Album,
+  ImageObject,
   SimplifiedArtist,
   SimplifiedTrack,
 } from "@/types/spotify-responses";
@@ -44,21 +45,31 @@ export default function Release({ params }: { params: { id: string } }) {
   }, []);
 
   return albumInfo ? (
-    <div>
-      {albumInfo.name}
-      <div className="flex gap-x-2">
-        {albumInfo.artists.map((artist: SimplifiedArtist, i: number) => (
-          <p key={i}>{artist.name}</p>
-        ))}
-      </div>
+    <div className="w-full px-28 py-10">
       <div className="flex gap-2">
         <div className="flex flex-col gap-y-2">
-          <Image
-            src={albumInfo.images[0].url}
-            alt={albumInfo.name}
-            height={400}
-            width={400}
-          />
+          <div className="flex">
+            <Image
+              src={
+                albumInfo.images.filter(
+                  (image: ImageObject) => image.height === 300
+                )[0].url
+              }
+              alt={albumInfo.name}
+            />
+            <div className="flex flex-col">
+              <h1 className="text-5xl font-bold">{albumInfo.name}</h1>
+
+              <div className="flex gap-x-2 text-2xl">
+                {albumInfo.artists.map(
+                  (artist: SimplifiedArtist, i: number) => (
+                    <p key={i}>{artist.name}</p>
+                  )
+                )}
+              </div>
+            </div>
+          </div>
+
           <h3 className="font-bold">Rate:</h3>
           {/* <Tooltip content="Please sign in to rate this album">
                 <div className="flex mb-2">
