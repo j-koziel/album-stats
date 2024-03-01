@@ -5,7 +5,7 @@ import vercelIcon from "../../public/vercel.svg";
 
 export function Footer() {
   return (
-    <div className="text-foreground bg-background">
+    <div className="text-foreground bg-background h-7">
       <Divider />
       <div className="flex gap-x-2 items-center justify-center text-lg py-2">
         Powered by
