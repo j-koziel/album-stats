@@ -1,7 +1,7 @@
 import { SpotifyAuthButton } from "@/components/spotify-auth-button";
 import clientPromise from "@/lib/mongodb";
 
-export const getDbConnection = async () => {
+const getDbConnection = async () => {
   try {
     await clientPromise;
     // `await clientPromise` will use the default database passed in the MONGODB_URI
