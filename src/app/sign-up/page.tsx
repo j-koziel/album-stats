@@ -1,12 +1,4 @@
-import {
-  Button,
-  Card,
-  CardBody,
-  CardFooter,
-  CardHeader,
-  Divider,
-  Input,
-} from "@nextui-org/react";
+import { Button, Divider, Input } from "@nextui-org/react";
 
 export default function SignUp() {
   return (
