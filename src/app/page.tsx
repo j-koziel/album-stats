@@ -1,5 +1,5 @@
 import { SpotifyAuthButton } from "@/components/spotify-auth-button";
-import clientPromise from "@/lib/mongodb";
+import clientPromise from "@/lib/mongodb/mongodb";
 
 const getDbConnection = async () => {
   try {

@@ -1,6 +1,5 @@
-import clientPromise from "@/lib/mongodb";
-import { User } from "@/types/models/users"
-import { NextRequest } from "next/server";
+import clientPromise from "@/lib/mongodb/mongodb";
+import { User } from "@/types/models/user"
 
 export async function GET() {
   try {
