@@ -25,6 +25,7 @@
     "eslint-config-next": "14.1.0",
     "framer-motion": "^11.0.3",
     "mongodb": "^6.4.0",
+    "mongoose": "^8.2.0",
     "next": "14.1.0",
     "postcss": "8.4.35",
     "query-string": "^8.2.0",
@@ -33,6 +34,7 @@
     "tailwind-scrollbar": "^3.1.0",
     "tailwindcss": "3.4.1",
     "typescript": "5.3.3",
-    "urlencode": "^2.0.0"
+    "urlencode": "^2.0.0",
+    "zod": "^3.22.4"
   }
 }
