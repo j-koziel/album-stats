@@ -3,7 +3,7 @@
 import { Button, Divider, Input } from "@nextui-org/react";
 import { useFormState, useFormStatus } from "react-dom";
 
-import { createNewUser } from "@/lib/mongodb/user-controller";
+import { createNewUser } from "@/lib/controllers/user-controller";
 import { useRouter } from "next/navigation";
 import React from "react";
 
@@ -31,6 +31,13 @@ export default function SignUp() {
         <Divider orientation="vertical" />
         <section className="w-1/2 flex items-center justify-center">
           <form action={formAction} className="flex flex-col items-center">
+            <Input
+              type="text"
+              placeholder="John Doe"
+              description="Your name"
+              label="Please enter your name"
+              name="name"
+            />
             <Input
               type="email"
               placeholder="example@gmail.com"
