@@ -46,8 +46,6 @@ export interface SimplifiedTrack {
   is_local: boolean
 }
 
-
-
 export interface SimplifiedAlbum {
   album_type: "single" | "album" | "compilation";
   artists: SimplifiedArtist[];
