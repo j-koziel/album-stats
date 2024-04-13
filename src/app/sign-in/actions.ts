@@ -1,10 +1,10 @@
-"use server"
+'use server'
 
-import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
+import { revalidatePath } from 'next/cache'
+import { redirect } from 'next/navigation'
 
-import { createClient } from "@/lib/supabase/server"
-import { loginFormSchema } from "@/types/models/user"
+import { createClient } from '@/lib/supabase/server'
+import { loginFormSchema } from '@/types/models/user'
 
 export async function login(formData: FormData) {
   const supabase = createClient()
@@ -17,16 +17,17 @@ export async function login(formData: FormData) {
   const validatedFormData = loginFormSchema.safeParse(rawFormData)
 
   if (!validatedFormData.success) {
-    throw new Error("These details are invalid")
+    redirect("/error")
   }
 
   const { error } = await supabase.auth.signInWithPassword(validatedFormData.data)
 
   if (error) {
-    redirect("/error")
+    redirect('/error')
   }
 
-  revalidatePath("/", "layout")
-  redirect("/dashboard")
-
+  revalidatePath('/', 'layout')
+  redirect('/dashboard')
 }
+
+

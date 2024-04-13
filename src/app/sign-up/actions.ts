@@ -12,7 +12,7 @@ export async function signup(formData: FormData) {
     name: formData.get("name"),
     email: formData.get("email"),
     password: formData.get("password"),
-    passwordConfirm: formData.get("password-confirm"),
+    passwordConfirm: formData.get("password-confirm")
   }
 
   const parse = newUserSchema.safeParse(rawFormData)
@@ -26,9 +26,10 @@ export async function signup(formData: FormData) {
   const { error } = await supabase.auth.signUp(parse.data)
 
   if (error) {
-    redirect("/error")
+    redirect('/error')
   }
 
-  revalidatePath("/", "layout")
-  redirect("/dashboard")
+  revalidatePath('/', 'layout')
+  redirect('/')
 }
+
