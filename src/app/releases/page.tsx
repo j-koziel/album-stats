@@ -71,7 +71,7 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
   };
 
   return (
-    <div className="flex flex-col justify-center items-center">
+    <div className="min-h-screen flex flex-col  items-center">
       <h1 className="text-5xl mb-4">Browse all releases</h1>
       <form
         className="flex items-center justify-center w-full gap-x-2 mb-4"
@@ -104,8 +104,6 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
               <AlbumCard
                 key={i}
                 album={album}
-                setAlbumInfo={setAlbumInfo}
-                openModal={onOpen}
                 className="flex flex-col w-[300px]"
               />
             )
@@ -122,9 +120,7 @@ ${spotifyApiEndpoints.search.album}&q=${encode(albumSearchQuery, "gbk")}`,
                   <AlbumCard
                     key={i}
                     album={album}
-                    setAlbumInfo={setAlbumInfo}
                     className="flex flex-col w-64"
-                    openModal={onOpen}
                   />
                 )
               )}

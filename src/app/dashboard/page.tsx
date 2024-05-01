@@ -7,11 +7,13 @@ export default async function Dashboard() {
 
   const { data, error } = await supabase.auth.getUser();
 
-  console.log(data);
-
   if (error || !data?.user) {
     redirect("/sign-in");
   }
 
-  return <p>Hello {data.user.email}</p>;
+  const { data: profile } = await supabase.from("profiles").select("*");
+
+  console.log(profile);
+
+  return <div className="min-h-screen">Welcome back, {data.user.email}</div>;
 }

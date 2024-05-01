@@ -5,11 +5,11 @@ import { createClient } from "@/lib/supabase/server"
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function signup(formData: FormData) {
+export async function signup(prevState: { message: string, isErr: boolean }, formData: FormData) {
   const supabase = createClient()
 
   const rawFormData = {
-    name: formData.get("name"),
+    username: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
     passwordConfirm: formData.get("password-confirm")
@@ -18,18 +18,25 @@ export async function signup(formData: FormData) {
   const parse = newUserSchema.safeParse(rawFormData)
 
   if (!parse.success) {
-    throw parse.error;
+    return { message: "The form was not parsed successfully", isErr: true }
   }
 
   parse.data.passwordConfirm = ""
 
-  const { error } = await supabase.auth.signUp(parse.data)
+  const { error } = await supabase.auth.signUp({
+    email: parse.data.email, password: parse.data.password, options: {
+      data: {
+        username: parse.data.username
+      }
+    }
+  })
 
   if (error) {
-    redirect('/error')
+    return { message: error.message, isErr: true }
   }
 
   revalidatePath('/', 'layout')
-  redirect('/')
+  // redirect('/')
+  return { message: "Registered successfully", isErr: false }
 }
 
