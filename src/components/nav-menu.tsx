@@ -8,21 +8,14 @@ import {
   NavbarMenu,
   NavbarMenuToggle,
   Link,
-  Button,
   NavbarMenuItem,
-  User,
 } from "@nextui-org/react";
 import React from "react";
 
-import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { AuthNavigation } from "./auth-nav";
 
 export function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isUserAuthenticated, setIsUserAuthenticated] = React.useState(false);
-  const router = useRouter();
-
-  const supabase = createClient();
 
   const menuItems = [
     { name: "Artists", link: "/artists" },
@@ -30,18 +23,6 @@ export function NavMenu() {
     { name: "Sign Up", link: "/sign-up" },
     { name: "Sign In", link: "/sign-in" },
   ];
-
-  React.useEffect(() => {
-    const isUserAuthenticated = async () => {
-      const { data, error } = await supabase.auth.getUser();
-
-      if (error) setIsUserAuthenticated(false);
-
-      data.user ? setIsUserAuthenticated(true) : setIsUserAuthenticated(false);
-    };
-
-    isUserAuthenticated();
-  }, []);
 
   return (
     <Navbar onMenuOpenChange={setIsMenuOpen}>
@@ -68,46 +49,7 @@ export function NavMenu() {
           </Link>
         </NavbarItem>
       </NavbarContent>
-      {isUserAuthenticated ? (
-        <NavbarContent justify="end">
-          <div className="flex items-center justify-center gap-x-2">
-            <NavbarItem>
-              <Button
-                color="danger"
-                variant="ghost"
-                onPress={async () => {
-                  const { error } = await supabase.auth.signOut();
-
-                  if (error) {
-                    router.push("/error");
-                  }
-
-                  router.push("/");
-                }}
-              >
-                Sign Out
-              </Button>
-            </NavbarItem>
-            <NavbarItem>
-              <User as={Link} href="/dashboard" name="John doe" />
-            </NavbarItem>
-          </div>
-        </NavbarContent>
-      ) : (
-        <NavbarContent justify="end">
-          <NavbarItem>
-            <Button as={Link} href="/sign-up">
-              Sign Up
-            </Button>
-          </NavbarItem>
-          <NavbarItem>
-            <Button as={Link} href="/sign-in" color="primary">
-              Sign in
-            </Button>
-          </NavbarItem>
-        </NavbarContent>
-      )}
-
+      <AuthNavigation />
       <NavbarMenu>
         {menuItems.map((menuItem, i) => (
           <NavbarMenuItem key={`${menuItem}-${i}`}>

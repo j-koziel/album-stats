@@ -4,8 +4,12 @@ import { Spinner } from "@nextui-org/react";
 import React, { Suspense } from "react";
 import axios from "axios";
 import { useSearchParams, redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 function GetAndSetAccessToken() {
+  const supabase = createClient();
+
   const searchParams = useSearchParams();
 
   const authCode = searchParams.get("code");
@@ -29,7 +33,18 @@ function GetAndSetAccessToken() {
         }
       );
 
-      localStorage.setItem("accessToken", res.data.access_token);
+      localStorage.setItem("spotify_access_token", res.data.access_token);
+
+      const { data, error } = await supabase.auth.updateUser({
+        data: { is_spotify_connected: true },
+      });
+
+      if (error) {
+        toast.error("Your spotify account could not be connected.");
+      }
+
+      toast.success("Your spotify account was successfully connected!");
+      return;
     };
 
     getAccessToken();

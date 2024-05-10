@@ -34,7 +34,9 @@ export default function Albums() {
         `${spotifyApiEndpoints.albums.latestReleases}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${localStorage.getItem(
+              "spotify_access_token"
+            )}`,
           },
         }
       );
