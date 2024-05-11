@@ -7,6 +7,7 @@ import { Inter } from "next/font/google";
 import { Providers } from "@/components/providers";
 import { NavMenu } from "@/components/nav-menu";
 import { Footer } from "@/components/footer";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,17 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <NavMenu />
+          <Toaster
+            toastOptions={{
+              classNames: {
+                error: "bg-danger text-danger-900 border-danger-900",
+                success: "bg-primary text-primary-900",
+                warning: "bg-warning text-warning-900",
+                info: "bg-blue-400",
+              },
+            }}
+            position="top-right"
+          />
           {children}
           <Footer />
           <Analytics />

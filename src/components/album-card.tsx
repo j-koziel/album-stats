@@ -3,26 +3,20 @@ import {
   Card,
   CardHeader,
   CardBody,
-  Chip,
   CardFooter,
   Image,
   Button,
 } from "@nextui-org/react";
 import { HeartFilledIcon, HeartIcon } from "@radix-ui/react-icons";
-import axios from "axios";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 export function AlbumCard({
   album,
   className,
-  setAlbumInfo,
-  openModal,
 }: {
   album: SimplifiedAlbum;
   className?: string;
-  setAlbumInfo: React.Dispatch<any>;
-  openModal: () => void;
 }) {
   const router = useRouter();
   const [isLiked, setIsLiked] = React.useState<boolean>(false);

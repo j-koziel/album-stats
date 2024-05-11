@@ -24,7 +24,7 @@ export function SpotifyAuthButton() {
       className="flex"
     >
       <FontAwesomeIcon icon={faSpotify} size="xs" />
-      <p className="text-[#1DB954]">Login with Spotify</p>
+      <p className="font-bold">Login with Spotify</p>
     </Button>
   );
 }

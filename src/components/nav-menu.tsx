@@ -8,10 +8,11 @@ import {
   NavbarMenu,
   NavbarMenuToggle,
   Link,
-  Button,
   NavbarMenuItem,
 } from "@nextui-org/react";
 import React from "react";
+
+import { AuthNavigation } from "./auth-nav";
 
 export function NavMenu() {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
@@ -48,18 +49,7 @@ export function NavMenu() {
           </Link>
         </NavbarItem>
       </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem>
-          <Button as={Link} href="/sign-up">
-            Sign Up
-          </Button>
-        </NavbarItem>
-        <NavbarItem>
-          <Button as={Link} href="/sign-in" color="primary">
-            Sign in
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
+      <AuthNavigation />
       <NavbarMenu>
         {menuItems.map((menuItem, i) => (
           <NavbarMenuItem key={`${menuItem}-${i}`}>

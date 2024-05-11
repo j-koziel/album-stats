@@ -18,6 +18,7 @@ import {
   Spinner,
   Tooltip,
   Image,
+  Textarea,
 } from "@nextui-org/react";
 import { StarIcon } from "@radix-ui/react-icons";
 import axios from "axios";
@@ -33,7 +34,9 @@ export default function Release({ params }: { params: { id: string } }) {
         `https://api.spotify.com/v1/albums/${params.id}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${localStorage.getItem(
+              "spotify_access_token"
+            )}`,
           },
         }
       );
@@ -124,15 +127,24 @@ export default function Release({ params }: { params: { id: string } }) {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center">
-                <h3 className="font-bold">Rate:</h3>
-                <Tooltip content="Please sign in to rate this album">
-                  <div className="flex mb-2">
-                    {ratings.map((_, i) => (
-                      <StarIcon key={i} height={36} width={36} />
-                    ))}
-                  </div>
-                </Tooltip>
+              <div className="flex flex-col items-center">
+                <div>
+                  <h3 className="font-bold">Rate:</h3>
+                  <Tooltip content="Please sign in to rate this album">
+                    <div className="flex mb-2">
+                      {ratings.map((_, i) => (
+                        <StarIcon key={i} height={36} width={36} />
+                      ))}
+                    </div>
+                  </Tooltip>
+                </div>
+                <div className="w-full">
+                  <h3>Review:</h3>
+                  <Textarea
+                    label="Your review of this album"
+                    placeholder="This album has a diverse sonic range..."
+                  />
+                </div>
               </div>
             </div>
 
