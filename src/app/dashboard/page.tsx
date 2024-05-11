@@ -26,16 +26,6 @@ export default function Dashboard() {
     getUserData();
   }, []);
 
-  // const supabase = createClient();
-
-  // const { data, error } = await supabase.auth.getUser();
-
-  // if (error || !data?.user) {
-  //   redirect("/sign-in");
-  // }
-
-  // const { data: profile } = await supabase.from("profiles").select("*");
-
   const renderConnectSpotifyButton = (isSpotifyConnected: boolean) => {
     return !isSpotifyConnected ? <SpotifyAuthButton /> : null;
   };
@@ -43,13 +33,12 @@ export default function Dashboard() {
   const renderReviewedAlbums = () => (
     <Carousel>
       <CarouselContent>
-        {state.user
-          ? state.user.reviewed_albums.map((album: any, i: number) => (
-              <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
-                hello
-              </CarouselItem>
-            ))
-          : null}
+        {state.user.reviewed_albums &&
+          state.user.reviewed_albums.map((album: any, i: number) => (
+            <CarouselItem key={i} className="md:basis-1/2 lg:basis-1/3">
+              hello
+            </CarouselItem>
+          ))}
       </CarouselContent>
       <CarouselPrevious />
       <CarouselNext />
