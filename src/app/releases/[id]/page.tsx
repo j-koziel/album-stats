@@ -20,13 +20,20 @@ import {
   Image,
   Textarea,
 } from "@nextui-org/react";
-import { StarIcon } from "@radix-ui/react-icons";
+import { HeartIcon, StarIcon } from "@radix-ui/react-icons";
 import axios from "axios";
 import React from "react";
 import encode from "urlencode";
+import { useAppDispatch, useAppSelector } from "@/lib/store/hooks";
+import { createClient } from "@/lib/supabase/client";
+import { toast } from "sonner";
 
 export default function Release({ params }: { params: { id: string } }) {
   const [albumInfo, setAlbumInfo] = React.useState<Album | null>(null);
+  const supabase = createClient();
+
+  const state = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
 
   React.useEffect(() => {
     const fetchAlbumData = async () => {
@@ -129,14 +136,71 @@ export default function Release({ params }: { params: { id: string } }) {
               </div>
               <div className="flex flex-col items-center">
                 <div>
+                  <HeartIcon
+                    height={24}
+                    width={24}
+                    onClick={async () => {
+                      const { data } = await supabase
+                        .from("albums")
+                        .select("*")
+                        .eq("album_id", params.id);
+
+                      if (!data) {
+                        toast.error("An unexpected error has occurred");
+                        return;
+                      }
+
+                      if (!data.length) {
+                        await supabase
+                          .from("albums")
+                          .insert({ album_id: params.id, likes: 1 });
+
+                        const res = await supabase.from("profiles").select("*");
+                        console.log(res.data);
+
+                        const usersLikedAlbums = state.user.liked_albums;
+                        await supabase
+                          .from("profiles")
+                          .update({
+                            liked_albums: [...usersLikedAlbums, params.id],
+                          })
+                          .eq("id", state.user.id);
+                      }
+
+                      if (data.length) {
+                        await supabase
+                          .from("albums")
+                          .update({ likes: data[0].likes + 1 })
+                          .eq("album_id", params.id);
+
+                        console.log(state.user.liked_albums);
+                        const res = await supabase.from("profiles").select("*");
+                        console.log(res.data);
+
+                        await supabase.from("profiles").update({
+                          liked_albums: state.user.liked_albums.push(params.id),
+                        });
+                      }
+                    }}
+                  />
+                </div>
+                <div>
                   <h3 className="font-bold">Rate:</h3>
-                  <Tooltip content="Please sign in to rate this album">
+                  {state.isAuthenticated ? (
                     <div className="flex mb-2">
                       {ratings.map((_, i) => (
                         <StarIcon key={i} height={36} width={36} />
                       ))}
                     </div>
-                  </Tooltip>
+                  ) : (
+                    <Tooltip content="Please sign in to rate this album">
+                      <div className="flex mb-2">
+                        {ratings.map((_, i) => (
+                          <StarIcon key={i} height={36} width={36} />
+                        ))}
+                      </div>
+                    </Tooltip>
+                  )}
                 </div>
                 <div className="w-full">
                   <h3>Review:</h3>
